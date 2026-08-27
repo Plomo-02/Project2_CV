@@ -35,3 +35,16 @@ The experimental design and working checklist are documented in [`PROJECT_GUIDEL
 5. Run the notebook from top to bottom, initially with `QUICK_MODE = True`.
 
 Dataset-specific loaders and training are the next implementation milestone. Dataset names and layouts will be fixed only after selecting the exact Kaggle dataset sources.
+
+Recommended Kaggle inputs:
+
+- [NYUv2 official split](https://www.kaggle.com/datasets/awsaf49/nyuv2-official-split-dataset) (`awsaf49/nyuv2-official-split-dataset`);
+- [KITTI depth prediction evaluation](https://www.kaggle.com/datasets/artemmmtry/kitti-depth-prediction-evaluation) (`artemmmtry/kitti-depth-prediction-evaluation`).
+
+Protocol references:
+
+- [official NYU Depth v2 dataset documentation](https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html);
+- [KITTI depth benchmark devkit](https://github.com/joseph-zhong/KITTI-devkit).
+
+The KITTI `val_selection_cropped` loader is implemented. The NYU loader will be
+finalized after verifying the exact mounted file layout in a Kaggle session.
