@@ -13,11 +13,11 @@ venv/
 Thumbs.db
 
 # Data and generated artifacts
-data/
-datasets/
-checkpoints/
-outputs/
-wandb/
+/data/
+/datasets/
+/checkpoints/
+/outputs/
+/wandb/
 *.pth
 *.pt
 *.ckpt
