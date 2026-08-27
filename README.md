@@ -52,3 +52,8 @@ Protocol references:
 
 The KITTI `val_selection_cropped` loader is implemented. The NYU loader will be
 finalized after verifying the exact mounted file layout in a Kaggle session.
+
+The notebook resolves both Kaggle input layouts automatically:
+
+- `/kaggle/input/<dataset-slug>`;
+- `/kaggle/input/datasets/<owner>/<dataset-slug>`.
