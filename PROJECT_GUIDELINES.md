@@ -39,7 +39,8 @@ Il confronto fra due o più modelli è incoraggiato, ma non dichiarato obbligato
 Il progetto sarà sviluppato in modalità **Kaggle-first**:
 
 - il deliverable eseguibile principale sarà un notebook Jupyter (`.ipynb`);
-- il notebook dovrà funzionare su una sessione Kaggle con acceleratore GPU;
+- il notebook dovrà funzionare su una sessione Kaggle con acceleratore GPU T4 x2;
+- la baseline userà inizialmente una sola T4 (`cuda:0`), senza distributed training;
 - non dovrà dipendere da percorsi locali Windows;
 - input e dataset Kaggle saranno cercati sotto `/kaggle/input`;
 - checkpoint, log, grafici e risultati saranno scritti sotto `/kaggle/working`;

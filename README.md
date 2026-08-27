@@ -28,11 +28,15 @@ The experimental design and working checklist are documented in [`PROJECT_GUIDEL
 
 ## Running on Kaggle
 
-1. Create a Kaggle notebook with a GPU accelerator.
+1. Create a Kaggle notebook with the **GPU T4 x2** accelerator. The current
+   Kaggle PyTorch build does not support the P100's `sm_60` architecture.
 2. Upload or import `notebooks/project_2_cores_mde_kaggle.ipynb`.
 3. Attach the required datasets from the notebook's **Input** panel.
 4. Set the dataset folder names in the `Config` cell.
 5. Run the notebook from top to bottom, initially with `QUICK_MODE = True`.
+
+The baseline uses one GPU (`cuda:0`). Selecting T4 x2 does not require
+distributed-training code; the second GPU can initially remain unused.
 
 Dataset-specific loaders and training are the next implementation milestone. Dataset names and layouts will be fixed only after selecting the exact Kaggle dataset sources.
 
