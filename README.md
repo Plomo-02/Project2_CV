@@ -58,3 +58,8 @@ The notebook resolves both Kaggle input layouts automatically:
 
 - `/kaggle/input/<dataset-slug>`;
 - `/kaggle/input/datasets/<owner>/<dataset-slug>`.
+
+The checked Kaggle paths currently used as defaults are:
+
+- `/kaggle/input/datasets/awsaf49/nyuv2-official-split-dataset`;
+- `/kaggle/input/datasets/artemmmtry/kitti-depth-prediction-evaluation`.
