@@ -4,7 +4,16 @@ Computer Vision project investigating convolutional-response OOD detection in a 
 
 ## Current status
 
-The repository is being developed **Kaggle-first**. The initial executable scaffold is in [`notebooks/project_2_cores_mde_kaggle.ipynb`](notebooks/project_2_cores_mde_kaggle.ipynb).
+The repository is being developed **Kaggle-first**. The executable notebook is in [`notebooks/project_2_cores_mde_kaggle.ipynb`](notebooks/project_2_cores_mde_kaggle.ipynb).
+
+Implemented so far:
+
+- portable Kaggle/Colab/local environment detection;
+- GPU and runtime diagnostics;
+- reproducibility configuration;
+- dataset discovery and early path validation;
+- RMSE, AbsRel, δ1, δ2 and δ3 depth metrics;
+- deterministic unit and notebook smoke tests for the depth metrics.
 
 The experimental design and working checklist are documented in [`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md).
 
@@ -26,4 +35,3 @@ The experimental design and working checklist are documented in [`PROJECT_GUIDEL
 5. Run the notebook from top to bottom, initially with `QUICK_MODE = True`.
 
 Dataset-specific loaders and training are the next implementation milestone. Dataset names and layouts will be fixed only after selecting the exact Kaggle dataset sources.
-
