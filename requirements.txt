@@ -1,0 +1,9 @@
+# Kaggle already provides PyTorch and the core scientific stack.
+# Keep explicit versions out until the selected FastDepth/CORES implementations
+# establish concrete compatibility requirements.
+numpy
+matplotlib
+pandas
+scikit-learn
+tqdm
+
