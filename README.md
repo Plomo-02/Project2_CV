@@ -50,8 +50,9 @@ Protocol references:
 - [official NYU Depth v2 dataset documentation](https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html);
 - [KITTI depth benchmark devkit](https://github.com/joseph-zhong/KITTI-devkit).
 
-The KITTI `val_selection_cropped` loader is implemented. The NYU loader will be
-finalized after verifying the exact mounted file layout in a Kaggle session.
+The KITTI `val_selection_cropped` loader and the NYU train/official-test loader
+are implemented. Both pair RGB and ground-truth depth by filename and preserve
+native-resolution depth for evaluation.
 
 The notebook resolves both Kaggle input layouts automatically:
 
