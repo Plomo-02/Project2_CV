@@ -14,6 +14,9 @@ Implemented so far:
 - dataset discovery and early path validation;
 - RMSE, AbsRel, δ1, δ2 and δ3 depth metrics;
 - deterministic unit and notebook smoke tests for the depth metrics.
+- optimized NYU/KITTI quick-mode loading;
+- a modern FastDepth-style MobileNetV2 baseline with named CORES feature levels;
+- a GPU forward-pass and output-shape smoke test.
 
 The experimental design and working checklist are documented in [`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md).
 

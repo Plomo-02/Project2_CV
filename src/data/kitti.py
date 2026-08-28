@@ -41,15 +41,22 @@ def _find_unique_directory(root: Path, directory_name: str) -> Path:
 def find_kitti_validation_directories(root: str | Path) -> tuple[Path, Path]:
     """Locate official ``val_selection_cropped`` RGB and ground-truth folders."""
     root = Path(root)
-    selection_roots = sorted(
-        path for path in root.rglob("val_selection_cropped") if path.is_dir()
+    known_locations = (
+        root / "data_depth_selection" / "depth_selection" / "val_selection_cropped",
+        root / "depth_selection" / "val_selection_cropped",
+        root / "val_selection_cropped",
     )
-    if len(selection_roots) != 1:
-        raise FileNotFoundError(
-            "Expected exactly one val_selection_cropped directory below "
-            f"{root}, found {len(selection_roots)}."
+    selection_root = next((path for path in known_locations if path.is_dir()), None)
+    if selection_root is None:
+        selection_roots = sorted(
+            path for path in root.rglob("val_selection_cropped") if path.is_dir()
         )
-    selection_root = selection_roots[0]
+        if len(selection_roots) != 1:
+            raise FileNotFoundError(
+                "Expected exactly one val_selection_cropped directory below "
+                f"{root}, found {len(selection_roots)}."
+            )
+        selection_root = selection_roots[0]
     image_dir = selection_root / "image"
     depth_dir = selection_root / "groundtruth_depth"
     if not image_dir.is_dir() or not depth_dir.is_dir():
