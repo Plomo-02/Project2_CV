@@ -25,10 +25,13 @@ New-Item -ItemType Directory -Force -Path $PublishDirectory | Out-Null
 Copy-Item -LiteralPath $NotebookPath -Destination $PublishNotebook -Force
 Copy-Item -LiteralPath $MetadataPath -Destination $PublishMetadata -Force
 
-python -m kaggle kernels push --path $PublishDirectory --timeout $TimeoutSeconds
-if ($LASTEXITCODE -ne 0) {
-    throw "Kaggle notebook push failed with exit code $LASTEXITCODE."
+$PushOutput = python -m kaggle kernels push --path $PublishDirectory --timeout $TimeoutSeconds 2>&1
+$PushExitCode = $LASTEXITCODE
+$PushOutput | ForEach-Object { Write-Host $_ }
+$PushText = $PushOutput | Out-String
+
+if ($PushExitCode -ne 0 -or $PushText -match "(?im)kernel push error|^error:") {
+    throw "Kaggle notebook push failed."
 }
 
 Write-Host "Published notebook to https://www.kaggle.com/code/plomo02/project2-cv"
-
