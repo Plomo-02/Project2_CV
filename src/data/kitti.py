@@ -14,6 +14,14 @@ from torch.utils.data import Dataset
 KITTI_DEPTH_SCALE = 256.0
 
 
+def kitti_groundtruth_name(image_name: str) -> str:
+    """Map a selected-validation RGB filename to its ground-truth filename."""
+    marker = "_sync_image_"
+    if marker not in image_name:
+        raise ValueError(f"Unexpected KITTI validation RGB filename: {image_name}")
+    return image_name.replace(marker, "_sync_groundtruth_depth_", 1)
+
+
 def _find_unique_directory(root: Path, directory_name: str) -> Path:
     candidates = sorted(
         path for path in root.rglob(directory_name) if path.is_dir()
@@ -80,7 +88,10 @@ class KITTIDepthValidationDataset(Dataset[dict[str, object]]):
         image_dir, depth_dir = find_kitti_validation_directories(self.root)
 
         image_paths = sorted(image_dir.glob("*.png"))
-        pairs = [(path, depth_dir / path.name) for path in image_paths]
+        pairs = [
+            (path, depth_dir / kitti_groundtruth_name(path.name))
+            for path in image_paths
+        ]
         missing = [depth for _, depth in pairs if not depth.is_file()]
         if missing:
             raise FileNotFoundError(
@@ -110,4 +121,3 @@ class KITTIDepthValidationDataset(Dataset[dict[str, object]]):
             "original_size": original_size,
             "sample_id": image_path.stem,
         }
-
