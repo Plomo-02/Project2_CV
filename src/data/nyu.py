@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import itertools
 from pathlib import Path
 
 import numpy as np
@@ -28,10 +29,21 @@ def find_nyu_split_directory(root: str | Path, split: str) -> Path:
     return split_dir
 
 
-def discover_nyu_pairs(root: str | Path, split: str) -> list[tuple[Path, Path]]:
+def discover_nyu_pairs(
+    root: str | Path,
+    split: str,
+    *,
+    limit: int | None = None,
+) -> list[tuple[Path, Path]]:
     """Pair ``rgb_<id>.png`` with ``depth_<id>.png`` recursively."""
     split_dir = find_nyu_split_directory(root, split)
-    rgb_paths = sorted(split_dir.rglob("rgb_*.png"))
+    rgb_iterator = split_dir.rglob("rgb_*.png")
+    if limit is None:
+        rgb_paths = sorted(rgb_iterator)
+    else:
+        if limit <= 0:
+            raise ValueError("limit must be positive when provided.")
+        rgb_paths = list(itertools.islice(rgb_iterator, limit))
     pairs = [
         (rgb_path, rgb_path.with_name(rgb_path.name.replace("rgb_", "depth_", 1)))
         for rgb_path in rgb_paths
@@ -69,8 +81,7 @@ class NYUDepthDataset(Dataset[dict[str, object]]):
         self.root = Path(root)
         self.split = split
         self.output_size = output_size
-        pairs = discover_nyu_pairs(self.root, split)
-        self.pairs = pairs[:limit] if limit is not None else pairs
+        self.pairs = discover_nyu_pairs(self.root, split, limit=limit)
 
     def __len__(self) -> int:
         return len(self.pairs)
@@ -93,4 +104,3 @@ class NYUDepthDataset(Dataset[dict[str, object]]):
             "original_size": original_size,
             "sample_id": image_path.stem.removeprefix("rgb_"),
         }
-
