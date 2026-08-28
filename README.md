@@ -22,7 +22,8 @@ Implemented so far:
   per-epoch and emergency recovery checkpoints, learning curves and qualitative
   prediction panels;
 - full NYU training configuration with a deterministic validation split, untouched
-  official test set, learning-rate scheduling, early stopping and compatible resume.
+  official test set, learning-rate scheduling, early stopping, compatible resume
+  and mid-epoch recovery checkpoints every 250 batches.
 
 The experimental design and working checklist are documented in [`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md).
 
