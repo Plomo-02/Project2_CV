@@ -5,6 +5,7 @@ __pycache__/
 .ipynb_checkpoints/
 .venv/
 venv/
+.kaggle-sync/
 
 # IDE / OS
 .vscode/
