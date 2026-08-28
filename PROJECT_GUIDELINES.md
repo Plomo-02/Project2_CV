@@ -291,26 +291,36 @@ Entrambe le persone devono saper spiegare l'intera pipeline.
 
 ## 11. Scaletta di lavoro
 
+### Stato aggiornato
+
+- Completati: repository Kaggle-first, loader NYU/KITTI, metriche depth, FastDepth,
+  smoke test GPU, overfit su mini-batch, training breve, checkpoint best/last/emergency.
+- Pronto per il prossimo avvio: training FastDepth completo su NYU con split
+  train/validation deterministico, test ufficiale separato, mixed precision,
+  scheduler, early stopping e resume compatibile.
+- Successivo: congelare il checkpoint baseline, implementare CORES, valutare
+  NYU contro KITTI con AUROC/FPR95 e completare le ablation multi-layer.
+
 ### Fase 0 — Definizione e verifica dello scope
 
 - [ ] Leggere integralmente paper CORES e FastDepth.
 - [ ] Confermare con la docente lo scope e l'ablation architetturale.
 - [ ] Stabilire hardware disponibile e budget temporale.
 - [ ] Scegliere split, risoluzione e subset iniziale.
-- [ ] Creare repository e notebook Kaggle riproducibile.
-- [ ] Definire la configurazione portabile Kaggle/Colab.
-- [ ] Verificare disponibilità GPU, spazio disco e versioni preinstallate su Kaggle.
+- [x] Creare repository e notebook Kaggle riproducibile.
+- [x] Definire la configurazione portabile Kaggle/Colab.
+- [x] Verificare disponibilità GPU, spazio disco e versioni preinstallate su Kaggle.
 
 **Deliverable:** protocollo di una pagina e repository eseguibile.
 
 ### Fase 1 — Baseline depth
 
-- [ ] Implementare i loader NYU e KITTI.
-- [ ] Visualizzare immagini, depth map e maschere valide.
-- [ ] Implementare/importare FastDepth citando correttamente la fonte.
-- [ ] Eseguire overfit su un batch come controllo.
-- [ ] Completare un training breve su subset.
-- [ ] Verificare le metriche depth con test sintetici.
+- [x] Implementare i loader NYU e KITTI.
+- [x] Visualizzare immagini, depth map e maschere valide.
+- [x] Implementare/importare FastDepth citando correttamente la fonte.
+- [x] Eseguire overfit su un batch come controllo.
+- [x] Completare un training breve su subset.
+- [x] Verificare le metriche depth con test sintetici.
 
 **Deliverable:** checkpoint baseline e tabella depth su NYU validation.
 

@@ -20,7 +20,9 @@ Implemented so far:
 - masked metric-depth L1 loss and a one-batch overfitting smoke test;
 - mixed-precision train/validation loops, best-checkpoint saving, NYU depth metrics,
   per-epoch and emergency recovery checkpoints, learning curves and qualitative
-  prediction panels.
+  prediction panels;
+- full NYU training configuration with a deterministic validation split, untouched
+  official test set, learning-rate scheduling, early stopping and compatible resume.
 
 The experimental design and working checklist are documented in [`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md).
 
