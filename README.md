@@ -16,7 +16,8 @@ Implemented so far:
 - deterministic unit and notebook smoke tests for the depth metrics.
 - optimized NYU/KITTI quick-mode loading;
 - a modern FastDepth-style MobileNetV2 baseline with named CORES feature levels;
-- a GPU forward-pass and output-shape smoke test.
+- a GPU forward-pass and output-shape smoke test;
+- masked metric-depth L1 loss and a one-batch overfitting smoke test for the training pipeline.
 
 The experimental design and working checklist are documented in [`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md).
 
