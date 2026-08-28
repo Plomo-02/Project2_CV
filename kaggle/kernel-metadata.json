@@ -10,11 +10,11 @@
   "enable_internet": true,
   "dataset_sources": [
     "artemmmtry/kitti-depth-prediction-evaluation",
-    "awsaf49/nyuv2-official-split-dataset"
+    "awsaf49/nyuv2-official-split-dataset",
+    "plomo02/project2-cv-checkpoints"
   ],
   "kernel_sources": [],
   "competition_sources": [],
   "model_sources": [],
   "machine_shape": "NvidiaTeslaT4"
 }
-

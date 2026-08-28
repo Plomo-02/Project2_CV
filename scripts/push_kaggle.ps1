@@ -1,5 +1,7 @@
 param(
-    [int]$TimeoutSeconds = 600
+    # Kaggle kernel maximum runtime, not the CLI request timeout.
+    [ValidateRange(60, 43200)]
+    [int]$TimeoutSeconds = 43200
 )
 
 $ErrorActionPreference = "Stop"

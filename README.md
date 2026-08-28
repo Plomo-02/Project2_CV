@@ -23,7 +23,9 @@ Implemented so far:
   prediction panels;
 - full NYU training configuration with a deterministic validation split, untouched
   official test set, learning-rate scheduling, early stopping, compatible resume
-  and mid-epoch recovery checkpoints every 250 batches.
+  and mid-epoch recovery checkpoints every 250 batches;
+- unbuffered notebook logging and a private Kaggle checkpoint dataset for recovery
+  across independent runs.
 
 The experimental design and working checklist are documented in [`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md).
 
