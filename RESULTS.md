@@ -44,3 +44,20 @@ For the middle encoder, response magnitude alone is sufficient and frequency
 degrades FPR95 substantially. Per-sample extreme-response selection does not
 improve the already near-perfect middle-layer result, although it makes the
 otherwise weak decoder response more informative.
+
+## Robustness and RGB-statistics baseline
+
+Confidence intervals are stratified 95% percentile intervals from 500 bootstrap
+replicates.
+
+| Configuration | AUROC (95% CI) | FPR95 (95% CI) |
+|---|---:|---:|
+| CORES middle magnitude | **0.99994** [0.99987, 1.00000] | **0.000** [0.000, 0.000] |
+| CORES middle full | 0.99990 [0.99976, 0.99999] | 0.001 [0.000, 0.003] |
+| CORES multi-layer | 0.99974 [0.99948, 0.99992] | 0.001 [0.000, 0.004] |
+| RGB Mahalanobis | 0.82283 [0.80352, 0.84269] | 0.759 [0.62548, 0.85052] |
+
+Simple image colour and contrast statistics detect part of the indoor/outdoor
+domain gap, but they are far below the middle-layer convolutional response.
+This supports the claim that CORES captures substantially more informative
+distribution evidence than trivial RGB appearance statistics.
