@@ -27,7 +27,8 @@ Implemented so far:
 - unbuffered notebook logging and a private Kaggle checkpoint dataset for recovery
   across independent runs;
 - a tested single-layer CORES implementation on signed pre-activation responses,
-  layer-wise and normalized multi-layer NYU/KITTI evaluation, and CSV/JSON exports.
+  layer-wise and normalized multi-layer NYU/KITTI evaluation, component ablations,
+  bootstrap confidence intervals, an RGB-statistics baseline and CSV/JSON exports.
 
 The experimental design and working checklist are documented in [`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md).
 
