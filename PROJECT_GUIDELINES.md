@@ -330,8 +330,8 @@ Entrambe le persone devono saper spiegare l'intera pipeline.
 - [x] Estrarre le attivazioni con shape documentate.
 - [x] Implementare lo score single-layer secondo il paper.
 - [x] Verificare lo score su tensori controllati.
-- [ ] Generare distribuzioni degli score per NYU e KITTI.
-- [ ] Calcolare AUROC e FPR95.
+- [x] Generare distribuzioni degli score per NYU e KITTI.
+- [x] Calcolare AUROC e FPR95.
 
 **Deliverable:** prima curva ROC e tabella per layer.
 
