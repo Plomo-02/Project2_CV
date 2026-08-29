@@ -28,7 +28,8 @@ Implemented so far:
   across independent runs;
 - a tested single-layer CORES implementation on signed pre-activation responses,
   layer-wise and normalized multi-layer NYU/KITTI evaluation, component ablations,
-  bootstrap confidence intervals, an RGB-statistics baseline and CSV/JSON exports.
+  bootstrap confidence intervals, RGB-statistics and untrained-network controls,
+  synthetic near-OOD corruptions and CSV/JSON exports.
 
 The experimental design and working checklist are documented in [`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md).
 
