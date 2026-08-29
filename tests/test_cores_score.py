@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from src.cores.score import single_layer_cores
+from src.cores.score import response_selected_cores, single_layer_cores
 
 
 def test_single_layer_components_match_hand_calculation() -> None:
@@ -34,3 +34,13 @@ def test_stronger_extremes_produce_higher_id_score() -> None:
 def test_rejects_post_relu_threshold_configuration() -> None:
     with pytest.raises(ValueError, match="tau_negative"):
         single_layer_cores(torch.ones(1, 2, 2, 2), tau_positive=1.0, tau_negative=1.0)
+
+
+def test_response_selection_uses_extreme_channels() -> None:
+    responses = torch.tensor([[[[1.1, -1.1]], [[4.0, -4.0]], [[2.0, -2.0]]]])
+    full = single_layer_cores(responses, tau_positive=1.0, tau_negative=-1.0)
+    selected = response_selected_cores(
+        responses, tau_positive=1.0, tau_negative=-1.0, selection_fraction=1 / 3
+    )
+    assert selected.response_magnitude_positive > full.response_magnitude_positive
+    assert selected.response_magnitude_negative > full.response_magnitude_negative
