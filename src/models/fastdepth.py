@@ -75,6 +75,22 @@ class FastDepthMobileNetV2(nn.Module):
         inputs = functional.interpolate(inputs, size=skip.shape[-2:], mode="nearest")
         return inputs + skip
 
+    @staticmethod
+    def _last_convolution(module: nn.Module) -> nn.Conv2d:
+        convolutions = [child for child in module.modules() if isinstance(child, nn.Conv2d)]
+        if not convolutions:
+            raise ValueError("The selected block does not contain a convolution.")
+        return convolutions[-1]
+
+    def cores_response_modules(self) -> dict[str, nn.Conv2d]:
+        """Return stable pre-normalization convolution layers for CORES."""
+        return {
+            "encoder_early": self._last_convolution(self.encoder[3]),
+            "encoder_middle": self._last_convolution(self.encoder[6]),
+            "encoder_late": self._last_convolution(self.encoder[18]),
+            "decoder_late": self.decoder0.pointwise[0],
+        }
+
     def forward_features(self, inputs: torch.Tensor) -> dict[str, torch.Tensor]:
         encoder_features: dict[int, torch.Tensor] = {}
         outputs = inputs
@@ -102,4 +118,3 @@ class FastDepthMobileNetV2(nn.Module):
         features = self.forward_features(inputs)
         raw_depth = self.depth_head(features["decoder_late"])
         return torch.sigmoid(raw_depth) * self.max_depth
-

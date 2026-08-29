@@ -303,7 +303,7 @@ Entrambe le persone devono saper spiegare l'intera pipeline.
 
 ### Fase 0 — Definizione e verifica dello scope
 
-- [ ] Leggere integralmente paper CORES e FastDepth.
+- [x] Leggere integralmente paper CORES e FastDepth.
 - [ ] Confermare con la docente lo scope e l'ablation architetturale.
 - [ ] Stabilire hardware disponibile e budget temporale.
 - [ ] Scegliere split, risoluzione e subset iniziale.
@@ -326,10 +326,10 @@ Entrambe le persone devono saper spiegare l'intera pipeline.
 
 ### Fase 2 — Baseline CORES
 
-- [ ] Identificare layer early, middle e late.
-- [ ] Estrarre le attivazioni con shape documentate.
-- [ ] Implementare lo score secondo il paper.
-- [ ] Verificare lo score su tensori controllati.
+- [x] Identificare layer early, middle e late.
+- [x] Estrarre le attivazioni con shape documentate.
+- [x] Implementare lo score single-layer secondo il paper.
+- [x] Verificare lo score su tensori controllati.
 - [ ] Generare distribuzioni degli score per NYU e KITTI.
 - [ ] Calcolare AUROC e FPR95.
 
