@@ -61,3 +61,27 @@ Simple image colour and contrast statistics detect part of the indoor/outdoor
 domain gap, but they are far below the middle-layer convolutional response.
 This supports the claim that CORES captures substantially more informative
 distribution evidence than trivial RGB appearance statistics.
+
+## Effect of depth training
+
+| Model state | AUROC (95% CI) | FPR95 (95% CI) |
+|---|---:|---:|
+| FastDepth trained on NYU | **0.99994** [0.99987, 0.99999] | **0.000** [0.000, 0.000] |
+| ImageNet encoder, no depth training | 0.91886 [0.90715, 0.93182] | 0.324 [0.28248, 0.41153] |
+| Fully random encoder | 0.45062 [0.41964, 0.48209] | 1.000 [0.99748, 1.000] |
+
+ImageNet pretraining provides a useful domain signal, but NYU depth training is
+responsible for most of the final separation. Random convolutional responses do
+not distinguish NYU from KITTI.
+
+## Synthetic near-OOD corruptions
+
+| NYU corruption | AUROC (95% CI) | FPR95 (95% CI) |
+|---|---:|---:|
+| Brightness x0.50 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] |
+| Average blur 7x7 | 1.000 [0.99999, 1.000] | 0.000 [0.000, 0.000] |
+| Gaussian noise sigma 0.10 | 0.94273 [0.92834, 0.95369] | 0.388 [0.31804, 0.47328] |
+
+CORES reacts strongly to blur and illumination shift. Gaussian noise is a more
+difficult near-OOD case: ranking remains good, but accepting 95% of clean NYU
+requires a high false-positive rate.
