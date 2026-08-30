@@ -85,3 +85,23 @@ not distinguish NYU from KITTI.
 CORES reacts strongly to blur and illumination shift. Gaussian noise is a more
 difficult near-OOD case: ranking remains good, but accepting 95% of clean NYU
 requires a high false-positive rate.
+
+## Threshold-calibration protocol
+
+To test whether the near-perfect NYU/KITTI result depends on thresholds fitted
+only from real ID validation samples, the middle-encoder magnitude score was
+also calibrated with synthetic Gaussian and uniform noise, following the
+calibration principle used in the CORES paper. KITTI was not used to choose the
+thresholds or grid configuration.
+
+| Calibration | tau positive | tau negative | AUROC | FPR95 |
+|---|---:|---:|---:|---:|
+| NYU validation median | 6.7341 | -5.2857 | **0.99994** | **0.000** |
+| Gaussian/uniform tuned | 4.1906 | -6.6864 | 0.99868 | 0.007 |
+
+The paper-style calibration loses only 0.00126 AUROC and 0.007 FPR95. This
+supports the conclusion that the NYU/KITTI separation is robust to the
+threshold-selection protocol, rather than an artefact of tuning on KITTI.
+The synthetic grid itself separated clean NYU from synthetic noise perfectly
+for every tested quantile pair, so the selected pair should not be interpreted
+as uniquely optimal.
