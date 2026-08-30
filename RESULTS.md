@@ -105,3 +105,45 @@ threshold-selection protocol, rather than an artefact of tuning on KITTI.
 The synthetic grid itself separated clean NYU from synthetic noise perfectly
 for every tested quantile pair, so the selected pair should not be interpreted
 as uniquely optimal.
+
+## Multi-layer aggregation
+
+Every layer score was standardized with NYU validation statistics. Aggregation
+weights and configurations were defined without using KITTI.
+
+| Aggregation | AUROC | FPR95 |
+|---|---:|---:|
+| All layers, uniform | 0.999737 | 0.001 |
+| Synthetic-noise weighted | 0.999737 | 0.001 |
+| Encoder only, uniform | **0.999884** | **0.000** |
+| Early + middle encoder | 0.999881 | **0.000** |
+| Leave out early encoder | 0.998469 | 0.005 |
+| Leave out middle encoder | 0.987777 | 0.052 |
+| Leave out late encoder | 0.999569 | 0.002 |
+| Leave out late decoder | **0.999884** | **0.000** |
+
+The synthetic weighting rule assigns 0.25 to every layer because all four
+layers perfectly separate clean validation images from synthetic Gaussian and
+uniform noise. This calibration proxy is therefore saturated and cannot rank
+layer reliability. Removing the weak decoder improves the uniform mean, while
+removing the middle encoder causes the largest degradation. Nevertheless, no
+multi-layer configuration exceeds the middle-encoder magnitude-only score
+(AUROC 0.999943, FPR95 0.000), so the simpler single-layer configuration remains
+the recommended final detector.
+
+## Calibration stability
+
+Middle-encoder magnitude thresholds were recalibrated with five seeds at each
+of five calibration-set sizes. All 25 trials retain FPR95 0.000.
+
+| Calibration samples | Mean AUROC | AUROC std | Maximum FPR95 |
+|---:|---:|---:|---:|
+| 16 | 0.999943 | 0.00000167 | 0.000 |
+| 32 | 0.999943 | 0.00000108 | 0.000 |
+| 64 | 0.999943 | 0.00000068 | 0.000 |
+| 128 | 0.999944 | 0.00000068 | 0.000 |
+| 256 | 0.999943 | 0.00000000 | 0.000 |
+
+The conclusion is insensitive to both seed and calibration size in this broad
+NYU/KITTI shift. Even 16 calibration images are sufficient for effectively the
+same ranking, although this should not be generalized to subtler OOD shifts.

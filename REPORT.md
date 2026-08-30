@@ -137,8 +137,36 @@ supports the robustness of the main conclusion to the threshold protocol.
 
 ### 5.4 Multi-layer aggregation and stability
 
-TODO after Kaggle version 16: insert aggregation table, calibration-size table,
-and the corresponding interpretation.
+| Aggregation | AUROC | FPR95 |
+|---|---:|---:|
+| All layers, uniform | 0.999737 | 0.001 |
+| Synthetic-noise weighted | 0.999737 | 0.001 |
+| Encoder only, uniform | **0.999884** | **0.000** |
+| Early + middle encoder | 0.999881 | **0.000** |
+| Leave out early encoder | 0.998469 | 0.005 |
+| Leave out middle encoder | 0.987777 | 0.052 |
+| Leave out late encoder | 0.999569 | 0.002 |
+| Leave out late decoder | **0.999884** | **0.000** |
+
+The synthetic-noise criterion produces equal weights because every layer
+perfectly separates clean validation images from Gaussian and uniform noise.
+It is therefore a saturated calibration proxy, not evidence that every layer
+is equally useful on real OOD data. Excluding the decoder improves the uniform
+mean, and excluding the middle encoder causes the largest degradation. The best
+single detector remains middle-encoder magnitude-only CORES (AUROC 0.999943,
+FPR95 0.000), which is also simpler than multi-layer inference.
+
+| Calibration samples | Mean AUROC | AUROC std | Maximum FPR95 |
+|---:|---:|---:|---:|
+| 16 | 0.999943 | 0.00000167 | 0.000 |
+| 32 | 0.999943 | 0.00000108 | 0.000 |
+| 64 | 0.999943 | 0.00000068 | 0.000 |
+| 128 | 0.999944 | 0.00000068 | 0.000 |
+| 256 | 0.999943 | 0.00000000 | 0.000 |
+
+Across five seeds per calibration size, FPR95 remains zero in all 25 trials.
+The detector is therefore insensitive to calibration seed and sample count for
+this broad cross-dataset shift, including when only 16 ID samples are used.
 
 ## 6. Discussion
 
@@ -155,7 +183,17 @@ use of synthetic rather than naturally occurring near-OOD datasets.
 
 ## 7. Conclusion
 
-TODO: finalize after the aggregation and stability results are verified.
+Intermediate convolutional responses from a depth estimator provide a very
+strong signal for distinguishing NYU from KITTI. The most effective and
+efficient configuration is the magnitude component from the middle encoder,
+which reaches AUROC 0.999943 and FPR95 0.000. Multi-layer aggregation does not
+improve this result, primarily because weaker late and decoder responses dilute
+the useful middle-layer signal. Controls against RGB statistics, pretraining,
+random features, threshold protocols, calibration seeds, and calibration sizes
+support the robustness of the conclusion. At the same time, performance on
+Gaussian near-OOD corruption and the large indoor/outdoor domain gap show that
+near-distribution detection remains the more challenging direction for future
+work.
 
 ## References
 

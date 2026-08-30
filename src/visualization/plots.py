@@ -137,6 +137,27 @@ def plot_controls(results: Mapping[str, pd.DataFrame], destination: Path) -> Pat
     return _save(fig, destination, "06_cores_robustness_controls.png")
 
 
+def plot_stability(frame: pd.DataFrame, destination: Path) -> Path:
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.2))
+    for seed, group in frame.groupby("seed"):
+        axes[0].plot(group["calibration_samples"], (1 - group["auroc"]) * 1e6,
+                     marker="o", alpha=0.75, label=f"seed {seed}")
+        axes[1].plot(group["calibration_samples"], group["tau_positive"],
+                     marker="o", alpha=0.75, label=f"positive, seed {seed}")
+        axes[1].plot(group["calibration_samples"], group["tau_negative"],
+                     marker="x", linestyle="--", alpha=0.65, label=f"negative, seed {seed}")
+    axes[0].set(xlabel="Calibration samples", ylabel="1 - AUROC (ppm)",
+                title="Detection stability; FPR95 = 0 throughout")
+    axes[0].legend(fontsize=8)
+    axes[1].set(xlabel="Calibration samples", ylabel="Response threshold",
+                title="Calibrated threshold stability")
+    axes[1].legend(fontsize=7, ncol=2)
+    for axis in axes:
+        axis.grid(alpha=0.25)
+    fig.tight_layout()
+    return _save(fig, destination, "08_cores_calibration_stability.png")
+
+
 def generate_all_figures(results_directory: str | Path, output_directory: str | Path) -> list[Path]:
     """Load saved experiment tables and render every final figure."""
     results_directory = Path(results_directory)
@@ -163,7 +184,7 @@ def generate_all_figures(results_directory: str | Path, output_directory: str | 
         + " — " + ablation["variant"].str.replace("_", " ")
     )
     ablation = ablation.set_index("configuration")[["auroc", "fpr95"]]
-    return [
+    paths = [
         plot_training(tables["fastdepth_training_history"], output_directory),
         plot_depth_metrics(depth_metrics, output_directory),
         plot_score_distributions(pd.read_csv(results_directory / "cores_scores.csv"), output_directory),
@@ -171,3 +192,12 @@ def generate_all_figures(results_directory: str | Path, output_directory: str | 
         _metric_bars(ablation, "CORES component ablation", output_directory, "05_cores_component_ablation.png"),
         plot_controls(tables, output_directory),
     ]
+    if "cores_multilayer_aggregation" in tables:
+        aggregation = tables["cores_multilayer_aggregation"].set_index("configuration")
+        paths.append(_metric_bars(
+            aggregation[["auroc", "fpr95"]], "CORES multi-layer aggregation",
+            output_directory, "07_cores_multilayer_aggregation.png",
+        ))
+    if "cores_calibration_stability" in tables:
+        paths.append(plot_stability(tables["cores_calibration_stability"], output_directory))
+    return paths

@@ -29,9 +29,14 @@ Implemented so far:
 - a tested single-layer CORES implementation on signed pre-activation responses,
   layer-wise and normalized multi-layer NYU/KITTI evaluation, component ablations,
   bootstrap confidence intervals, RGB-statistics and untrained-network controls,
-  synthetic near-OOD corruptions and CSV/JSON exports.
+  synthetic near-OOD corruptions, leakage-free weighted aggregation, calibration
+  stability analysis and CSV/JSON exports;
+- eight reproducible report figures and a complete version-16 Kaggle evaluation.
 
-The experimental design and working checklist are documented in [`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md).
+The experimental design and working checklist are documented in
+[`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md). Confirmed metrics are collected
+in [`RESULTS.md`](RESULTS.md), raw tables in [`results/`](results/), generated
+figures in [`figures/`](figures/), and the report draft in [`REPORT.md`](REPORT.md).
 
 ## Intended experiment
 
@@ -54,7 +59,9 @@ The experimental design and working checklist are documented in [`PROJECT_GUIDEL
 The baseline uses one GPU (`cuda:0`). Selecting T4 x2 does not require
 distributed-training code; the second GPU can initially remain unused.
 
-Dataset-specific loaders and training are the next implementation milestone. Dataset names and layouts will be fixed only after selecting the exact Kaggle dataset sources.
+The final detector is the middle-encoder magnitude-only CORES score. It reaches
+AUROC 0.999943 and FPR95 0.000 on NYU ID versus KITTI OOD and remains stable
+across five calibration seeds and calibration sets as small as 16 images.
 
 Recommended Kaggle inputs:
 

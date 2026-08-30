@@ -1,0 +1,6 @@
+configuration,auroc,fpr95
+encoder_early,0.9896651376146788,0.044
+encoder_middle,0.9999006116207951,0.001
+encoder_late,0.9027538226299695,0.466
+decoder_late,0.514434250764526,0.798
+multi_layer_mean,0.999737003058104,0.001

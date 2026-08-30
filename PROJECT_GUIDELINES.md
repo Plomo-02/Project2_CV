@@ -339,9 +339,9 @@ Entrambe le persone devono saper spiegare l'intera pipeline.
 
 - [x] Normalizzare gli score senza usare il test set.
 - [x] Implementare media semplice.
-- [ ] Implementare eventuale aggregazione pesata.
+- [x] Implementare eventuale aggregazione pesata.
 - [x] Confrontare singoli layer e aggregazioni.
-- [ ] Analizzare stabilità rispetto a seed e quantità di dati.
+- [x] Analizzare stabilità rispetto a seed e quantità di dati.
 
 **Deliverable:** ablation multi-layer completa.
 
@@ -356,9 +356,9 @@ Entrambe le persone devono saper spiegare l'intera pipeline.
 
 ### Fase 5 — Consolidamento
 
-- [ ] Ripetere gli esperimenti definitivi con configurazioni congelate.
+- [x] Ripetere gli esperimenti definitivi con configurazioni congelate.
 - [x] Salvare risultati grezzi in CSV/JSON.
-- [ ] Generare grafici tramite script riproducibili.
+- [x] Generare grafici tramite script riproducibili.
 - [ ] Fare smoke test su un ambiente pulito.
 - [ ] Completare README e notebook demo.
 
