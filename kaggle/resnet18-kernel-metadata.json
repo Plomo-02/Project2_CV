@@ -1,0 +1,19 @@
+{
+  "id": "plomo02/project2-cv-resnet18-ablation",
+  "title": "Project2 CV ResNet18 Ablation",
+  "code_file": "resnet18-ablation.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artemmmtry/kitti-depth-prediction-evaluation",
+    "awsaf49/nyuv2-official-split-dataset"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": [],
+  "machine_shape": "NvidiaTeslaT4"
+}
