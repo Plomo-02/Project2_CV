@@ -66,11 +66,17 @@ def plot_training(history: pd.DataFrame, destination: Path) -> Path:
 
 def plot_depth_metrics(metrics: pd.DataFrame, destination: Path) -> Path:
     selected = metrics[["rmse", "abs_rel", "delta1"]]
-    fig, axis = plt.subplots(figsize=(8, 4.5))
-    selected.plot.bar(ax=axis, color=["#4472C4", "#ED7D31", "#70AD47"])
-    axis.set(title="FastDepth evaluation", ylabel="Metric value", xlabel="")
-    axis.tick_params(axis="x", rotation=0)
-    axis.grid(axis="y", alpha=0.25)
+    fig, axes = plt.subplots(1, 3, figsize=(13, 4.5))
+    for axis, (metric, colour, title) in zip(axes, (
+        ("rmse", "#4472C4", "RMSE ↓"),
+        ("abs_rel", "#ED7D31", "AbsRel ↓"),
+        ("delta1", "#70AD47", "δ1 ↑"),
+    )):
+        selected[metric].plot.bar(ax=axis, color=colour)
+        axis.set(title=title, ylabel="Metric value", xlabel="")
+        axis.tick_params(axis="x", rotation=20)
+        axis.grid(axis="y", alpha=0.25)
+    fig.suptitle("FastDepth evaluation across ID and OOD domains")
     fig.tight_layout()
     return _save(fig, destination, "02_fastdepth_depth_metrics.png")
 

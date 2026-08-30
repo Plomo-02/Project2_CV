@@ -1,5 +1,9 @@
 # CORES for Monocular Depth Estimation
 
+**Computer Vision — Fall/Winter 2026**<br>
+**Students:** _insert names and student IDs before submission_<br>
+**Repository:** <https://github.com/Plomo-02/Project2_CV>
+
 ## Abstract
 
 This project studies whether convolutional responses from a monocular depth
@@ -34,14 +38,38 @@ The main research questions are:
 
 ### 2.1 Monocular depth estimation and FastDepth
 
-TODO: summarize monocular depth estimation and motivate the lightweight
-FastDepth-style MobileNetV2 encoder-decoder baseline.
+Monocular depth estimation predicts a dense metric depth map from one RGB image.
+Unlike active RGB-D or LiDAR sensing, it requires no dedicated ranging hardware,
+but a single image leaves scale and geometry ambiguous. FastDepth addresses the
+additional constraint of embedded inference with a lightweight encoder-decoder
+and an efficient depthwise-separable decoder [2]. Its original implementation
+uses MobileNetV1; this project retains the FastDepth decoder principles—nearest
+upsampling, additive skip connections, and depthwise 5 × 5 convolutions—but uses
+a maintained torchvision MobileNetV2 encoder.
+
+MobileNetV2 builds efficient features through inverted residual blocks and
+linear bottlenecks [3]. It is a suitable maintained backbone because it exposes
+multiple convolutional stages while keeping the complete depth model at 2.39
+million parameters. This implementation is therefore described as
+*FastDepth-style*, not as an exact reproduction of the original ICRA model.
 
 ### 2.2 Out-of-distribution detection and CORES
 
-TODO: introduce activation-based OOD detection and describe the original CORES
-method, including response magnitude, response frequency, positive and negative
-responses, and its original classification setting.
+Post-hoc OOD detectors attempt to identify inputs that differ from a model's
+training distribution without retraining the task model. CORES starts from the
+observation that convolutional kernels generally produce more pronounced
+responses for ID inputs [1]. For each kernel it analyses the maximum and minimum
+spatial responses, measuring both how far they exceed calibrated positive or
+negative thresholds and how frequently such threshold crossings occur.
+
+The original method backtracks from prominent classifier predictions to select
+sample-relevant kernels across layers [1]. A monocular depth network has dense
+regression outputs rather than class logits, so that exact class-kernel
+trajectory is unavailable. Our primary adaptation evaluates all kernels at
+named encoder and decoder stages. A second variant selects the 20% channels with
+the most extreme positive and negative responses per sample. Both variants are
+reported explicitly so that results from the dense-prediction adaptation are
+not misrepresented as a direct reproduction of the classification method.
 
 ## 3. Method
 
@@ -52,6 +80,23 @@ one dense depth channel. RGB inputs are resized to 224 × 304. Invalid depth
 pixels are excluded from the masked L1 training loss and from every evaluation
 metric. The model contains 2,390,713 parameters and is trained on the official
 NYU training split using a deterministic train/validation partition.
+
+| Setting | Value |
+|---|---:|
+| Input resolution | 224 × 304 |
+| Batch size | 8 |
+| Optimizer | AdamW |
+| Initial learning rate | 1 × 10⁻⁴ |
+| Weight decay | 1 × 10⁻⁴ |
+| Maximum epochs | 20 |
+| Validation fraction | 0.10 |
+| NYU valid range | 0–10 m |
+| KITTI evaluation range | 0–80 m |
+
+Training uses masked metric L1 loss, automatic mixed precision, a
+ReduceLROnPlateau scheduler, validation-based best-checkpoint selection, and
+recovery checkpoints every 250 batches. The final experiment ran on a Kaggle
+Tesla T4 using PyTorch.
 
 ### 3.2 CORES adaptation to dense prediction
 
@@ -64,6 +109,30 @@ identical classification implementation.
 For each layer, thresholds are calibrated using NYU validation responses only.
 The score combines positive and negative response magnitudes and frequencies;
 higher values indicate stronger agreement with the ID response pattern.
+
+For a response tensor $A \in \mathbb{R}^{C \times H \times W}$, let
+$p_c=\max_{h,w}A_{c,h,w}$ and $n_c=\min_{h,w}A_{c,h,w}$. With calibrated
+thresholds $\tau^+$ and $\tau^-$, the four components are
+
+$$
+RM^+=\frac{1}{C}\sum_c[p_c-\tau^+]_+,\quad
+RM^-=\frac{1}{C}\sum_c[\tau^- - n_c]_+,
+$$
+
+$$
+RF^+=\frac{1}{C}\sum_c\mathbf{1}(p_c>\tau^+),\quad
+RF^-=\frac{1}{C}\sum_c\mathbf{1}(n_c<\tau^-).
+$$
+
+We compute the ranking-equivalent log score
+
+$$
+S=10\left(\log RM^+ + \log RM^-\right)
+ + \log RF^+ + \log RF^-,
+$$
+
+using an epsilon of $10^{-12}$ for numerical stability. The magnitude-only
+ablation removes the two frequency terms.
 
 ### 3.3 Multi-layer aggregation
 
@@ -83,6 +152,13 @@ choose thresholds, normalization statistics, weights, or configurations.
 
 The deterministic split contains 42,826 training, 4,758 validation, and 654 NYU
 test samples. KITTI contributes 1,000 OOD samples.
+
+NYU Depth v2 contains indoor RGB-D scenes captured with a Microsoft Kinect [4].
+KITTI contains outdoor driving data recorded from a vehicle-mounted multi-sensor
+platform [5]; its depth-prediction benchmark provides aligned RGB images and
+LiDAR-derived depth maps [6]. RGB inputs from both domains use the same resize
+and ImageNet normalization. Depth targets remain in metres and are resized with
+a separately propagated validity mask.
 
 ### 4.2 Metrics
 
@@ -108,6 +184,20 @@ The best validation checkpoint was obtained at epoch 19.
 |---|---:|---:|---:|---:|---:|---:|
 | NYU validation | 0.1676 | 0.2778 | 0.0701 | 0.9530 | 0.9897 | 0.9971 |
 | NYU official test | 0.5071 | 0.7901 | 0.2016 | 0.7181 | 0.9171 | 0.9698 |
+| KITTI OOD (0–80 m) | 6.3899 | 9.8854 | 0.6912 | 0.0792 | 0.1655 | 0.2725 |
+
+![FastDepth training and validation curves](figures/01_fastdepth_training.png)
+
+![Depth metrics across ID and OOD splits](figures/02_fastdepth_depth_metrics.png)
+
+The larger official-test error relative to the internal validation split is
+reported rather than hidden: the two splits come from different packaged
+sampling procedures, and the result limits claims about absolute depth quality.
+On KITTI, the NYU-trained model deteriorates sharply. Its output is capped at
+the 10 m NYU training range while KITTI is evaluated up to 80 m; therefore these
+numbers measure cross-domain failure, not a competitive KITTI benchmark. This
+is nevertheless the evaluation required here: CORES identifies as OOD a domain
+on which metric depth quality genuinely collapses.
 
 ### 5.2 Layer-wise OOD detection
 
@@ -123,6 +213,10 @@ The middle encoder is the strongest individual feature stage. The decoder is
 close to random, suggesting that depth reconstruction substantially changes or
 discards the domain evidence available in intermediate encoder responses.
 
+![Layer-wise ROC curves](figures/04_cores_roc_curves.png)
+
+![Layer-wise CORES score distributions](figures/03_cores_score_distributions.png)
+
 ### 5.3 Ablations and controls
 
 Magnitude-only middle-layer CORES reaches AUROC 0.99994 and FPR95 0.000. The RGB
@@ -130,6 +224,8 @@ baseline reaches only AUROC 0.82283 and FPR95 0.759. Performance decreases to
 AUROC 0.91886 without depth training and to 0.45062 with a fully random encoder.
 These controls show that the separation cannot be explained solely by simple
 RGB statistics or arbitrary convolutional features.
+
+![CORES component ablation](figures/05_cores_component_ablation.png)
 
 Synthetic Gaussian/uniform threshold calibration reaches AUROC 0.99868 and
 FPR95 0.007 without using KITTI for model selection. This small reduction
@@ -168,6 +264,10 @@ Across five seeds per calibration size, FPR95 remains zero in all 25 trials.
 The detector is therefore insensitive to calibration seed and sample count for
 this broad cross-dataset shift, including when only 16 ID samples are used.
 
+![Multi-layer aggregation](figures/07_cores_multilayer_aggregation.png)
+
+![Calibration stability](figures/08_cores_calibration_stability.png)
+
 ## 6. Discussion
 
 The very large NYU/KITTI separation is both a strength and a limitation. It
@@ -180,6 +280,14 @@ detection is not solved by the almost perfect cross-dataset result.
 Further limitations include the single depth architecture, a single trained
 checkpoint, the absence of semantic class kernels in dense regression, and the
 use of synthetic rather than naturally occurring near-OOD datasets.
+
+The project proposal encourages comparison of two or more depth models and asks
+for architectural analysis. We satisfy the required layer-depth analysis and
+compare trained, ImageNet-only, and random states of the same architecture, but
+we do not claim a two-architecture benchmark. Adding an independently trained
+METER or original-MobileNetV1 FastDepth model would be the most direct extension
+[7]. This limitation is preferable to presenting an untrained second network as
+a meaningful architecture comparison.
 
 ## 7. Conclusion
 
@@ -197,5 +305,31 @@ work.
 
 ## References
 
-TODO: add complete bibliographic entries for CORES, FastDepth, MobileNetV2, NYU
-Depth v2, KITTI, and the metric/protocol sources used by the project.
+1. K. Tang, C. Hou, W. Peng, R. Chen, P. Zhu, W. Wang, and Z. Tian,
+   “[CORES: Convolutional Response-based Score for Out-of-distribution
+   Detection](https://openaccess.thecvf.com/content/CVPR2024/html/Tang_CORES_Convolutional_Response-based_Score_for_Out-of-distribution_Detection_CVPR_2024_paper.html),”
+   *CVPR*, pp. 10916–10925, 2024.
+2. D. Wofk, F. Ma, T.-J. Yang, S. Karaman, and V. Sze,
+   “[FastDepth: Fast Monocular Depth Estimation on Embedded
+   Systems](https://fastdepth.mit.edu/2019_icra_fastdepth.pdf),” *ICRA*,
+   pp. 6101–6108, 2019.
+3. M. Sandler, A. Howard, M. Zhu, A. Zhmoginov, and L.-C. Chen,
+   “[MobileNetV2: Inverted Residuals and Linear
+   Bottlenecks](https://openaccess.thecvf.com/content_cvpr_2018/html/Sandler_MobileNetV2_Inverted_Residuals_CVPR_2018_paper.html),”
+   *CVPR*, pp. 4510–4520, 2018.
+4. N. Silberman, P. Kohli, D. Hoiem, and R. Fergus,
+   “[Indoor Segmentation and Support Inference from RGBD
+   Images](https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html),” *ECCV*,
+   2012.
+5. A. Geiger, P. Lenz, and R. Urtasun,
+   “[Are We Ready for Autonomous Driving? The KITTI Vision Benchmark
+   Suite](https://www.cvlibs.net/projects/autonomous_vision_survey/literature/Geiger2012CVPR.pdf),”
+   *CVPR*, 2012.
+6. KITTI Vision Benchmark Suite,
+   “[Depth Prediction Evaluation](https://www.cvlibs.net/datasets/kitti/eval_depth_all.php),”
+   accessed August 2026.
+7. L. Papa, P. Russo, and I. Amerini,
+   “[METER: A Mobile Vision Transformer Architecture for Monocular Depth
+   Estimation](https://doi.org/10.1109/TCSVT.2023.3260310),” *IEEE Transactions
+   on Circuits and Systems for Video Technology*, vol. 33, no. 10,
+   pp. 5882–5893, 2023.

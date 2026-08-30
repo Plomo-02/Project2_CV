@@ -8,6 +8,12 @@ The best checkpoint was selected at epoch 19 using NYU validation L1.
 |---|---:|---:|---:|---:|---:|---:|
 | NYU validation | 0.1676 | 0.2778 | 0.0701 | 0.9530 | 0.9897 | 0.9971 |
 | NYU official test | 0.5071 | 0.7901 | 0.2016 | 0.7181 | 0.9171 | 0.9698 |
+| KITTI OOD (0–80 m) | 6.3899 | 9.8854 | 0.6912 | 0.0792 | 0.1655 | 0.2725 |
+
+KITTI is evaluated in metric depth up to 80 m while the NYU-trained network is
+bounded to a 10 m output. The severe degradation is expected and should not be
+compared with models trained on KITTI; it verifies that the selected OOD domain
+also corresponds to a meaningful failure of the downstream depth task.
 
 ## CORES-MDE all-kernel baseline
 

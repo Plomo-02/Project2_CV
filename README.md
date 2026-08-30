@@ -4,7 +4,8 @@ Computer Vision project investigating convolutional-response OOD detection in a 
 
 ## Current status
 
-The repository is being developed **Kaggle-first**. The executable notebook is in [`notebooks/project_2_cores_mde_kaggle.ipynb`](notebooks/project_2_cores_mde_kaggle.ipynb).
+The completed project is **Kaggle-first**. The executable notebook is in
+[`notebooks/project_2_cores_mde_kaggle.ipynb`](notebooks/project_2_cores_mde_kaggle.ipynb).
 
 Implemented so far:
 
@@ -31,12 +32,16 @@ Implemented so far:
   bootstrap confidence intervals, RGB-statistics and untrained-network controls,
   synthetic near-OOD corruptions, leakage-free weighted aggregation, calibration
   stability analysis and CSV/JSON exports;
-- eight reproducible report figures and a complete version-16 Kaggle evaluation.
+- eight reproducible report figures and a complete final Kaggle evaluation.
 
 The experimental design and working checklist are documented in
 [`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md). Confirmed metrics are collected
 in [`RESULTS.md`](RESULTS.md), raw tables in [`results/`](results/), generated
-figures in [`figures/`](figures/), and the report draft in [`REPORT.md`](REPORT.md).
+figures in [`figures/`](figures/), and the report in [`REPORT.md`](REPORT.md).
+The submission presentation is available as
+[`presentation/CORES_MDE_presentation.pptx`](presentation/CORES_MDE_presentation.pptx),
+with an editable text outline in [`PRESENTATION.md`](PRESENTATION.md). The
+requirement-by-requirement audit is in [`COMPLIANCE.md`](COMPLIANCE.md).
 
 ## Intended experiment
 
@@ -49,12 +54,20 @@ figures in [`figures/`](figures/), and the report draft in [`REPORT.md`](REPORT.
 
 ## Running on Kaggle
 
-1. Create a Kaggle notebook with the **GPU T4 x2** accelerator. The current
-   Kaggle PyTorch build does not support the P100's `sm_60` architecture.
-2. Upload or import `notebooks/project_2_cores_mde_kaggle.ipynb`.
-3. Attach the required datasets from the notebook's **Input** panel.
-4. Set the dataset folder names in the `Config` cell.
-5. Run the notebook from top to bottom, initially with `QUICK_MODE = True`.
+1. Import `notebooks/project_2_cores_mde_kaggle.ipynb` into Kaggle.
+2. Select a **T4 GPU** accelerator. The tested PyTorch build does not support
+   the P100's older `sm_60` architecture.
+3. Attach the three inputs listed below. The checkpoint input is needed only to
+   reproduce evaluation without repeating the four-hour training run.
+4. For a loader and forward-pass smoke test, set `quick_mode=True`,
+   `train_model=False`, and `load_checkpoint=False` in `Config`.
+5. For evaluation of the final model, use `quick_mode=False`,
+   `train_model=False`, and `load_checkpoint=True`.
+6. To retrain from scratch, use `quick_mode=False`, `train_model=True`, and
+   `load_checkpoint=False`. The notebook saves best, last, mid-epoch, and
+   emergency checkpoints under `/kaggle/working/cores-mde/checkpoints`.
+7. Run all cells in order. CSV/JSON results and PNG figures are written under
+   `/kaggle/working/cores-mde` and appear in the saved notebook output.
 
 The baseline uses one GPU (`cuda:0`). Selecting T4 x2 does not require
 distributed-training code; the second GPU can initially remain unused.
@@ -67,6 +80,7 @@ Recommended Kaggle inputs:
 
 - [NYUv2 official split](https://www.kaggle.com/datasets/awsaf49/nyuv2-official-split-dataset) (`awsaf49/nyuv2-official-split-dataset`);
 - [KITTI depth prediction evaluation](https://www.kaggle.com/datasets/artemmmtry/kitti-depth-prediction-evaluation) (`artemmmtry/kitti-depth-prediction-evaluation`).
+- private final checkpoint dataset (`plomo02/project2-cv-checkpoints`).
 
 Protocol references:
 

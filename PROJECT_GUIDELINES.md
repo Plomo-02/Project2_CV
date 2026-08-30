@@ -177,11 +177,11 @@ Tabella minima:
 
 | Configurazione | Layer | Aggregazione | AUROC ↑ | FPR95 ↓ | Costo aggiuntivo |
 |---|---|---|---:|---:|---:|
-| FastDepth | Early | Nessuna | TBD | TBD | TBD |
-| FastDepth | Middle | Nessuna | TBD | TBD | TBD |
-| FastDepth | Late | Nessuna | TBD | TBD | TBD |
-| FastDepth | E+M+L | Media | TBD | TBD | TBD |
-| FastDepth | E+M+L | Pesata | TBD | TBD | TBD |
+| FastDepth | Early | Nessuna | 0.98967 | 0.044 | Non misurato |
+| FastDepth | Middle | Nessuna | 0.99990 | 0.001 | Non misurato |
+| FastDepth | Late | Nessuna | 0.90275 | 0.466 | Non misurato |
+| FastDepth | E+M+L+D | Media | 0.99974 | 0.001 | Non misurato |
+| FastDepth | E+M+L+D | Pesata sintetica | 0.99974 | 0.001 | Non misurato |
 
 Per coprire l'impatto della profondità del modello, aggiungere almeno una variante controllata, per esempio un encoder alternativo o una configurazione ridotta. Tutto il resto del protocollo deve restare invariato.
 
@@ -293,13 +293,13 @@ Entrambe le persone devono saper spiegare l'intera pipeline.
 
 ### Stato aggiornato
 
-- Completati: repository Kaggle-first, loader NYU/KITTI, metriche depth, FastDepth,
-  smoke test GPU, overfit su mini-batch, training breve, checkpoint best/last/emergency.
-- Pronto per il prossimo avvio: training FastDepth completo su NYU con split
-  train/validation deterministico, test ufficiale separato, mixed precision,
-  scheduler, early stopping e resume compatibile.
-- Successivo: congelare il checkpoint baseline, implementare CORES, valutare
-  NYU contro KITTI con AUROC/FPR95 e completare le ablation multi-layer.
+- Completati: training FastDepth su NYU, checkpoint ripristinabili, metriche depth
+  ID, implementazione CORES, valutazione NYU/KITTI, ablation per layer e
+  componente, aggregazione multi-layer, controlli, stabilità, risultati grezzi,
+  otto grafici, relazione e contenuto della presentazione.
+- Completata nella versione Kaggle 17 la valutazione depth OOD su KITTI 0–80 m.
+- Limite dichiarato: una sola architettura depth addestrata; il confronto di due
+  o più modelli è incoraggiato dalla traccia ma non obbligatorio.
 
 ### Fase 0 — Definizione e verifica dello scope
 
@@ -359,17 +359,17 @@ Entrambe le persone devono saper spiegare l'intera pipeline.
 - [x] Ripetere gli esperimenti definitivi con configurazioni congelate.
 - [x] Salvare risultati grezzi in CSV/JSON.
 - [x] Generare grafici tramite script riproducibili.
-- [ ] Fare smoke test su un ambiente pulito.
-- [ ] Completare README e notebook demo.
+- [x] Fare smoke test su un ambiente pulito.
+- [x] Completare README e notebook demo.
 
 **Deliverable:** repository riproducibile e risultati finali.
 
 ### Fase 6 — Presentazione
 
-- [ ] Descrivere problema, ipotesi e contributo.
-- [ ] Spiegare CORES senza affidarsi al codice.
-- [ ] Mostrare pipeline, protocollo e principali risultati.
-- [ ] Discutere failure case e limiti del confronto NYU/KITTI.
+- [x] Descrivere problema, ipotesi e contributo.
+- [x] Spiegare CORES senza affidarsi al codice.
+- [x] Mostrare pipeline, protocollo e principali risultati.
+- [x] Discutere failure case e limiti del confronto NYU/KITTI.
 - [ ] Dichiarare contributi individuali e fonti esterne.
 - [ ] Provare la presentazione e preparare domande tecniche.
 
