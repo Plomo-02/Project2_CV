@@ -10,7 +10,8 @@
   "enable_internet": true,
   "dataset_sources": [
     "artemmmtry/kitti-depth-prediction-evaluation",
-    "awsaf49/nyuv2-official-split-dataset"
+    "awsaf49/nyuv2-official-split-dataset",
+    "plomo02/project2-cv-resnet18-checkpoints"
   ],
   "kernel_sources": [],
   "competition_sources": [],

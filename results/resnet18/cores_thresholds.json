@@ -1,0 +1,18 @@
+{
+  "encoder_early": {
+    "tau_positive": 8.969169616699219,
+    "tau_negative": -9.364507675170898
+  },
+  "encoder_middle": {
+    "tau_positive": 0.8327638506889343,
+    "tau_negative": -1.070592999458313
+  },
+  "encoder_late": {
+    "tau_positive": 0.49196773767471313,
+    "tau_negative": -0.714080274105072
+  },
+  "decoder_late": {
+    "tau_positive": 1.4679803848266602,
+    "tau_negative": -2.6753134727478027
+  }
+}

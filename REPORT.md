@@ -14,7 +14,8 @@ classification to dense depth estimation and evaluated with NYU as the
 in-distribution domain and KITTI as the out-of-distribution domain. The study
 includes layer-wise and component ablations, RGB-statistics and training-state
 controls, synthetic corruptions, leakage-free threshold calibration,
-multi-layer aggregation, and calibration stability.
+multi-layer aggregation, calibration stability, and an independently trained
+ResNet18 architectural ablation.
 
 ## 1. Introduction
 
@@ -33,6 +34,7 @@ The main research questions are:
 4. Does multi-layer aggregation improve over the best individual layer?
 5. How stable are the conclusions across calibration protocols, seeds, and
    calibration-set sizes?
+6. Does the same CORES behaviour transfer to a different convolutional encoder?
 
 ## 2. Related work
 
@@ -268,6 +270,33 @@ this broad cross-dataset shift, including when only 16 ID samples are used.
 
 ![Calibration stability](figures/08_cores_calibration_stability.png)
 
+### 5.5 Architectural ablation: ResNet18
+
+To test whether the result is architecture-independent, we trained a second
+depth network with a pretrained ResNet18 encoder and the same decoder design,
+data splits, resolution, loss, optimizer family, epoch budget, evaluation
+metrics, and CORES protocol. It has 11,383,457 parameters, compared with
+2,390,713 for the MobileNetV2 model.
+
+| Model | NYU test RMSE | NYU test AbsRel | NYU test δ1 | KITTI RMSE | Middle magnitude AUROC | FPR95 |
+|---|---:|---:|---:|---:|---:|---:|
+| MobileNetV2 | **0.7901** | **0.2016** | 0.7181 | 9.8854 | **0.999943** | **0.000** |
+| ResNet18 | 1.0801 | 0.2093 | **0.7652** | **9.5713** | 0.834523 | 0.499 |
+
+ResNet18 improves NYU-test δ1 and all three reported KITTI metrics, although it
+is worse on NYU-test L1, RMSE, and AbsRel. Its best single CORES component is
+middle positive-only (AUROC 0.877557, FPR95 0.459), while the directly matched
+middle magnitude score reaches only 0.834523/0.499. Neither multi-layer
+aggregation nor calibration resampling closes this gap.
+
+The training-state control also reverses: ResNet18 middle-magnitude AUROC drops
+from 0.916150 with ImageNet-only weights to 0.834523 after depth training. For
+MobileNetV2 it rises from 0.918858 to 0.999943. Thus stronger depth accuracy
+does not imply stronger CORES detection, and task training can affect response
+separation in an architecture-dependent direction.
+
+![Architecture comparison](figures/09_architecture_comparison.png)
+
 ## 6. Discussion
 
 The very large NYU/KITTI separation is both a strength and a limitation. It
@@ -277,17 +306,11 @@ shift. Synthetic corruptions provide a more difficult complementary test:
 Gaussian noise yields AUROC 0.94273 but FPR95 0.388, showing that near-OOD
 detection is not solved by the almost perfect cross-dataset result.
 
-Further limitations include the single depth architecture, a single trained
-checkpoint, the absence of semantic class kernels in dense regression, and the
-use of synthetic rather than naturally occurring near-OOD datasets.
-
-The project proposal encourages comparison of two or more depth models and asks
-for architectural analysis. We satisfy the required layer-depth analysis and
-compare trained, ImageNet-only, and random states of the same architecture, but
-we do not claim a two-architecture benchmark. Adding an independently trained
-METER or original-MobileNetV1 FastDepth model would be the most direct extension
-[7]. This limitation is preferable to presenting an untrained second network as
-a meaningful architecture comparison.
+Remaining limitations include one trained checkpoint per architecture, the
+absence of semantic class kernels in dense regression, and synthetic rather
+than naturally occurring near-OOD datasets. The two encoders also differ in
+capacity, so the ablation establishes architectural dependence but does not
+isolate parameter count as its cause.
 
 ## 7. Conclusion
 
@@ -298,10 +321,12 @@ which reaches AUROC 0.999943 and FPR95 0.000. Multi-layer aggregation does not
 improve this result, primarily because weaker late and decoder responses dilute
 the useful middle-layer signal. Controls against RGB statistics, pretraining,
 random features, threshold protocols, calibration seeds, and calibration sizes
-support the robustness of the conclusion. At the same time, performance on
-Gaussian near-OOD corruption and the large indoor/outdoor domain gap show that
-near-distribution detection remains the more challenging direction for future
-work.
+support the robustness of the MobileNetV2 result. The ResNet18 ablation shows
+that this near-perfect performance is not universal: depth quality and CORES
+quality can move independently, and depth training can either strengthen or
+weaken domain separation. Performance on Gaussian near-OOD corruption and the
+large indoor/outdoor gap leave near-distribution detection as the key open
+direction.
 
 ## References
 

@@ -296,10 +296,10 @@ Entrambe le persone devono saper spiegare l'intera pipeline.
 - Completati: training FastDepth su NYU, checkpoint ripristinabili, metriche depth
   ID, implementazione CORES, valutazione NYU/KITTI, ablation per layer e
   componente, aggregazione multi-layer, controlli, stabilità, risultati grezzi,
-  otto grafici, relazione e contenuto della presentazione.
+  nove grafici, relazione e contenuto della presentazione.
 - Completata nella versione Kaggle 17 la valutazione depth OOD su KITTI 0–80 m.
-- Limite dichiarato: una sola architettura depth addestrata; il confronto di due
-  o più modelli è incoraggiato dalla traccia ma non obbligatorio.
+- Completata l'ablation architetturale con un secondo modello ResNet18
+  addestrato per 20 epoche e valutato con lo stesso protocollo.
 
 ### Fase 0 — Definizione e verifica dello scope
 
@@ -347,10 +347,10 @@ Entrambe le persone devono saper spiegare l'intera pipeline.
 
 ### Fase 4 — Ablation architetturale
 
-- [ ] Scegliere una variante leggera e motivata.
-- [ ] Eseguire lo stesso protocollo sperimentale.
+- [x] Scegliere una variante motivata (ResNet18).
+- [x] Eseguire lo stesso protocollo sperimentale.
 - [ ] Misurare parametri, latenza e memoria.
-- [ ] Confrontare qualità depth e capacità OOD.
+- [x] Confrontare qualità depth e capacità OOD.
 
 **Deliverable:** tabella efficienza–accuratezza e risposta alla quinta domanda di ricerca.
 

@@ -146,11 +146,18 @@ def build() -> None:
         "FPR95 remains zero in all 25 trials.",
         "Synthetic threshold protocol: AUROC 0.99868, FPR95 0.007.",
     ], "08_cores_calibration_stability.png")
+    content_slide(prs, "Architecture ablation: ResNet18", [
+        "ResNet18: 11.38M parameters versus MobileNetV2's 2.39M.",
+        "NYU-test delta1 improves from 0.7181 to 0.7652.",
+        "Middle-magnitude CORES falls from 0.999943 / 0.000 to 0.834523 / 0.499.",
+        "ImageNet-only ResNet18 is stronger than its depth-trained version.",
+        "Depth quality does not predict OOD quality; the response signal is architecture-dependent.",
+    ], "09_architecture_comparison.png")
     content_slide(prs, "Failure cases and limitations", [
         "NYU indoor versus KITTI roads is a broad, visually easy domain shift.",
         "The NYU model is capped at 10 m, so KITTI metric depth deteriorates sharply.",
         "Gaussian near-OOD corruption: AUROC 0.94273, FPR95 0.388.",
-        "One trained architecture and one checkpoint.",
+        "One trained checkpoint per architecture; parameter count is not isolated.",
         "FastDepth-style MobileNetV2, not an exact MobileNetV1 reproduction.",
         "Dense-prediction channel selection is an explicit adaptation of CORES.",
     ])
@@ -159,6 +166,7 @@ def build() -> None:
         "The middle encoder magnitude is the simplest and strongest detector.",
         "Weak late/decoder layers can dilute multi-layer aggregation.",
         "The result is stable, but naturally occurring near-OOD remains open.",
+        "ResNet18 confirms that near-perfect CORES separation is not universal.",
         "Repository contains notebook, checkpoints, raw tables, figures, tests and report.",
     ])
 

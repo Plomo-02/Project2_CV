@@ -12,14 +12,14 @@ evidence. “Encouraged” items are distinguished from mandatory deliverables.
 | Project presentation in repository | `presentation/CORES_MDE_presentation.pptx` and editable `PRESENTATION.md` | Complete |
 | Prepare and split NYU for training/validation | Deterministic 42,826/4,758 split; untouched 654-image official test | Complete |
 | Collect and resize KITTI OOD samples | Official 1,000-image validation selection at 224 × 304 | Complete |
-| Implement and train a lightweight depth model | 2.39M-parameter FastDepth-style MobileNetV2, 20 epochs | Complete |
-| Compare two or more models | The brief says this is encouraged, not mandatory | Not performed; declared limitation |
+| Implement and train a lightweight depth model | 2.39M MobileNetV2 and 11.38M ResNet18 depth models, 20 epochs each | Complete |
+| Compare two or more models | Independently trained MobileNetV2 and ResNet18 under a matched protocol | Complete |
 | Integrate layer-wise CORES response statistics and score | Signed response hooks and four named stages | Complete |
 | Evaluate OOD with AUROC and FPR95 | NYU official test versus KITTI | Complete |
 | Evaluate depth with RMSE, AbsRel, δ1, δ2, δ3 on ID | NYU validation and official test | Complete |
 | Evaluate depth metrics on OOD | Version 17: RMSE 9.8854, AbsRel 0.6912, δ1 0.0792 at 0–80 m | Complete |
 | Ablate different layers/model depth | Early, middle, late encoder and late decoder | Complete |
-| Compare convolutional architectures | One architecture plus trained/pretrained/random controls | Partial; declared limitation |
+| Compare convolutional architectures | MobileNetV2 versus ResNet18, plus trained/pretrained/random controls | Complete |
 | Provide an interpretable analysis | Layer, component, RGB, training-state, corruption, threshold and stability controls | Complete |
 
 ## Additional work beyond the minimum

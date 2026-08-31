@@ -153,3 +153,25 @@ of five calibration-set sizes. All 25 trials retain FPR95 0.000.
 The conclusion is insensitive to both seed and calibration size in this broad
 NYU/KITTI shift. Even 16 calibration images are sufficient for effectively the
 same ranking, although this should not be generalized to subtler OOD shifts.
+
+## ResNet18 architecture ablation
+
+The independent ResNet18 depth model completed 20 epochs and selected epoch 19.
+It contains 11,383,457 parameters. The matched results are:
+
+| Model | NYU val RMSE | NYU test RMSE | NYU test δ1 | KITTI RMSE | Middle magnitude AUROC | FPR95 |
+|---|---:|---:|---:|---:|---:|---:|
+| MobileNetV2 | **0.2778** | **0.7901** | 0.7181 | 9.8854 | **0.999943** | **0.000** |
+| ResNet18 | 0.3386 | 1.0801 | **0.7652** | **9.5713** | 0.834523 | 0.499 |
+
+ResNet18's strongest component is middle positive-only (AUROC 0.877557,
+FPR95 0.459). Its encoder-only aggregation reaches 0.844355/0.548 and does not
+beat that single component. Middle-magnitude performance is stable across all
+tested calibration sizes (approximately 0.8345 AUROC and 0.499 FPR95), so the
+gap from MobileNetV2 is not sampling noise.
+
+The training control is especially informative: ResNet18 falls from 0.916150
+AUROC with ImageNet-only weights to 0.834523 after depth training, whereas
+MobileNetV2 rises from 0.918858 to 0.999943. Depth quality therefore does not
+predict CORES quality, and task training reshapes the domain signal differently
+across architectures. Raw ResNet18 outputs are under `results/resnet18/`.

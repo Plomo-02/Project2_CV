@@ -1,0 +1,3 @@
+architecture,parameters,nyu_validation_rmse,nyu_validation_absrel,nyu_validation_delta1,nyu_test_rmse,nyu_test_absrel,nyu_test_delta1,kitti_rmse,kitti_absrel,kitti_delta1,middle_magnitude_auroc,middle_magnitude_fpr95,imagenet_middle_magnitude_auroc
+FastDepth-MobileNetV2,2390713,0.2778,0.0701,0.9530,0.7901,0.2016,0.7181,9.8854,0.6912,0.0792,0.999943,0.000,0.918858
+ResNet18Depth,11383457,0.338561,0.044406,0.978659,1.080123,0.209330,0.765188,9.571318,0.681218,0.089795,0.834523,0.499,0.916150

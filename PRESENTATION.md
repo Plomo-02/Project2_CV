@@ -110,30 +110,46 @@ Depth training creates most of the useful OOD separation.
 
 ---
 
-## 10. Failure cases and honest limitations
+## 10. Architecture ablation: ResNet18
+
+| Model | Parameters | NYU test δ1 | Middle magnitude AUROC | FPR95 |
+|---|---:|---:|---:|---:|
+| MobileNetV2 | 2.39M | 0.7181 | **0.999943** | **0.000** |
+| ResNet18 | 11.38M | **0.7652** | 0.834523 | 0.499 |
+
+- Better depth δ1 does not imply better OOD detection.
+- ResNet18 ImageNet-only AUROC is 0.91615, but depth training lowers it to 0.83452.
+- MobileNetV2 shows the opposite training effect.
+
+![Architecture comparison](figures/09_architecture_comparison.png)
+
+---
+
+## 11. Failure cases and honest limitations
 
 - NYU indoor versus KITTI road scenes is a broad domain shift.
 - The NYU model is capped at 10 m, so KITTI metric depth deteriorates sharply.
 - Gaussian near-OOD noise: AUROC 0.94273, FPR95 0.388.
-- One trained architecture and one checkpoint.
+- One trained checkpoint per architecture; parameter count is not isolated.
 - FastDepth-style MobileNetV2, not exact original MobileNetV1 FastDepth.
 - Dense-prediction channel selection is an adaptation of classifier CORES.
 - Synthetic noise is too easy to calibrate meaningful layer weights.
 
 ---
 
-## 11. Conclusions
+## 12. Conclusions
 
 - CORES transfers effectively from classification to dense depth estimation.
 - The middle encoder is the best location for this model.
 - Magnitude is sufficient; frequency and weak layers can dilute the score.
 - The final detector is simple, post-hoc and stable, but near-OOD remains open.
+- Near-perfect CORES performance is architecture-dependent, not universal.
 
 ---
 
-## 12. Reproducibility and questions
+## 13. Reproducibility and questions
 
 - Complete Kaggle notebook and checkpoint recovery.
-- Raw CSV/JSON results and eight generated figures.
+- Raw CSV/JSON results and nine generated summary figures.
 - Deterministic splits, seeds and smoke tests.
 - GitHub: <https://github.com/Plomo-02/Project2_CV>

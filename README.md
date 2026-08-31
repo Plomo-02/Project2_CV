@@ -33,6 +33,8 @@ Implemented so far:
   synthetic near-OOD corruptions, leakage-free weighted aggregation, calibration
   stability analysis and CSV/JSON exports;
 - eight reproducible report figures and a complete final Kaggle evaluation.
+- an independently trained ResNet18 depth ablation, matched CORES analysis,
+  separate checkpoints, raw outputs, and an architecture-comparison figure.
 
 The experimental design and working checklist are documented in
 [`PROJECT_GUIDELINES.md`](PROJECT_GUIDELINES.md). Confirmed metrics are collected
@@ -75,6 +77,14 @@ distributed-training code; the second GPU can initially remain unused.
 The final detector is the middle-encoder magnitude-only CORES score. It reaches
 AUROC 0.999943 and FPR95 0.000 on NYU ID versus KITTI OOD and remains stable
 across five calibration seeds and calibration sets as small as 16 images.
+
+The separate ResNet18 notebook is
+[`notebooks/resnet18_architecture_ablation_kaggle.ipynb`](notebooks/resnet18_architecture_ablation_kaggle.ipynb)
+and its Kaggle kernel is `plomo02/project2-cv-resnet18-ablation`. It defaults to
+loading `plomo02/project2-cv-resnet18-checkpoints`, preserving the original
+MobileNetV2 notebook and checkpoints. ResNet18 reaches middle-magnitude AUROC
+0.834523 and FPR95 0.499, demonstrating that CORES performance is strongly
+architecture-dependent even when depth estimation remains competitive.
 
 Recommended Kaggle inputs:
 
